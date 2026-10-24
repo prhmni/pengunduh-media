@@ -1,6 +1,7 @@
 # Pengunduh Media Cepat
 
 Aplikasi web modern berbasis Flask dan yt-dlp untuk mengunduh audio (MP3) maupun video (MP4) langsung lewat peramban.
+<img width="1023" height="636" alt="Beranda Web" src="https://github.com/user-attachments/assets/5ee32179-8ad7-435a-ad89-e0198d23ec2a" />
 
 ## Fitur
 * Tampilan modern dan bersih dengan Tailwind CSS.
