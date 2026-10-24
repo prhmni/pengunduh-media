@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengunduh Media Cepat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url("{{ url_for('static', filename='background.jfif') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 selection:bg-indigo-500 selection:text-white">
+
+    <div class="w-full max-w-lg">
+        <!-- Brand / Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-slate-900/70 text-indigo-400 rounded-2xl mb-4 border border-white/20 shadow-xl backdrop-blur-md">
+                <i class="fa-solid fa-cloud-arrow-down text-2xl"></i>
+            </div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 drop-shadow-sm">
+                Pengunduh Media Cepat
+            </h1>
+            <p class="text-slate-700 text-sm font-medium mt-1">Unduh audio atau video kualitas terbaik tanpa ribet</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="bg-slate-900/85 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden text-slate-100">
+            <form method="POST" class="space-y-5 relative">
+                <!-- URL Input -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Tautan Media</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-link text-sm"></i>
+                        </span>
+                        <input 
+                            type="text" 
+                            name="url" 
+                            placeholder="Tempel tautan video di sini..." 
+                            required 
+                            class="w-full pl-10 pr-4 py-3 bg-slate-800/90 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        >
+                    </div>
+                </div>
+
+                <!-- Format Selection -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Pilih Format</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="relative flex items-center justify-center p-3 border border-slate-700 rounded-xl cursor-pointer bg-slate-800/60 hover:border-slate-500 transition-all has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-600/20">
+                            <input type="radio" name="format" value="mp4" checked class="sr-only">
+                            <div class="flex items-center gap-2 text-sm font-medium">
+                                <i class="fa-solid fa-film text-indigo-400"></i>
+                                <span>Video (MP4)</span>
+                            </div>
+                        </label>
+                        <label class="relative flex items-center justify-center p-3 border border-slate-700 rounded-xl cursor-pointer bg-slate-800/60 hover:border-slate-500 transition-all has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-600/20">
+                            <input type="radio" name="format" value="mp3" class="sr-only">
+                            <div class="flex items-center gap-2 text-sm font-medium">
+                                <i class="fa-solid fa-music text-purple-400"></i>
+                                <span>Audio (MP3)</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit" 
+                    class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.99] text-white font-semibold rounded-xl text-sm transition-all duration-150 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30"
+                >
+                    <i class="fa-solid fa-bolt text-xs"></i>
+                    <span>Mulai Unduh</span>
+                </button>
+            </form>
+
+            <!-- Alerts & Result -->
+            {% if pesan %}
+                <div id="statusAlert" class="mt-5 p-4 rounded-xl border {% if file_unduhan %}bg-emerald-500/10 border-emerald-500/30 text-emerald-300{% else %}bg-amber-500/10 border-amber-500/30 text-amber-300{% endif %} flex items-center justify-between text-sm">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid {% if file_unduhan %}fa-circle-check text-emerald-400{% else %}fa-triangle-exclamation text-amber-400{% endif %}"></i>
+                        <span>{{ pesan }}</span>
+                    </div>
+                    <button onclick="document.getElementById('statusAlert').remove()" class="text-slate-400 hover:text-white transition-colors">
+                        <i class="fa-solid fa-xmark text-base"></i>
+                    </button>
+                </div>
+            {% endif %}
+
+            {% if file_unduhan %}
+                <div class="mt-4 pt-4 border-t border-slate-700/60 space-y-3">
+                    <a 
+                        href="/get/{{ file_unduhan }}" 
+                        class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-semibold rounded-xl text-sm transition-all duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 text-center"
+                    >
+                        <i class="fa-solid fa-download"></i>
+                        <span>Simpan File ke Perangkat</span>
+                    </a>
+                    
+                    <a 
+                        href="/" 
+                        class="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl text-xs transition-all flex items-center justify-center gap-2 text-center border border-slate-700"
+                    >
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Unduh Media Lain (Bersihkan)</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6 text-xs text-slate-800 font-semibold flex items-center justify-center gap-1.5">
+            <i class="fa-brands fa-github text-sm"></i>
+            <span>byprhmni</span>
+        </div>
+    </div>
+
+</body>
+</html>
